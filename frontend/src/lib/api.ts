@@ -209,3 +209,15 @@ export const fetchUserProfile = () => get<UserProfile>("/users/me");
 
 /** Get analysis history. */
 export const fetchHistory = () => get<HistoryEntry[]>("/history");
+
+/** Google OAuth login. */
+export const googleAuth = (credential: string) =>
+  post<{ access_token: string; token_type: string }>("/google-auth", { credential });
+
+/** Register a new user. */
+export const registerUser = (body: any) =>
+  post<any>("/register", body);
+
+/** Login with email/password. */
+export const loginUser = (body: any) =>
+  post<{ access_token: string; token_type: string }>("/login", body);

@@ -10,6 +10,7 @@ import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import FloatingLines from '@/components/FloatingLines';
+import { googleAuth, loginUser, registerUser } from '@/lib/api';
 
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -27,22 +28,13 @@ const Auth = () => {
         setError('');
 
         try {
-            const endpoint = isLogin ? '/login' : '/register';
             const body = isLogin
                 ? { email, password }
                 : { email, password, full_name: fullName };
 
-            const response = await fetch(`/api${endpoint}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.detail || 'An error occurred');
-            }
+            const data = isLogin 
+                ? await loginUser(body)
+                : await registerUser(body);
 
             if (isLogin) {
                 login(data.access_token);
@@ -61,15 +53,7 @@ const Auth = () => {
 
     const handleGoogleSuccess = async (credentialResponse: any) => {
         try {
-            const response = await fetch('/api/google-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ credential: credentialResponse.credential }),
-            });
-
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.detail);
-
+            const data = await googleAuth(credentialResponse.credential);
             login(data.access_token);
             toast.success('Successfully logged in with Google!');
         } catch (err: any) {
