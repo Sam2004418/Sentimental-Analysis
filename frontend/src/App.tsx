@@ -18,7 +18,7 @@ import Facial from "./pages/Facial";
 import Voice from "./pages/Voice";
 
 const queryClient = new QueryClient();
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "397490170861-edpjdc84rtvv7vasfutd0ocupe4p7umo.apps.googleusercontent.com";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
